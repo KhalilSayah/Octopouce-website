@@ -77,7 +77,8 @@ export const Hero: React.FC = () => {
             </span>
           </h1>
         </motion.div>
-        
+        <br></br>
+        <br></br>
         <motion.p
           className="text-xl md:text-2xl mb-8 text-foreground-600 max-w-2xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
