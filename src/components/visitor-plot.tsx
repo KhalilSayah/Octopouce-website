@@ -15,10 +15,10 @@ type Visitor = {
 };
 
 const eventColors: Record<string, string> = {
-  "hackathon": "#FF3BAC", // primary
-  "ctf": "#00c3ff", // secondary
-  "datathon": "#17c964", // success
-  "workshop": "#f5a524", // warning
+  hackathon: "#FF3BAC",
+  ctf: "#00c3ff",
+  datathon: "#17c964",
+  workshop: "#f5a524",
 };
 
 const eventOptions = [
@@ -36,13 +36,13 @@ export const VisitorPlot: React.FC = () => {
   const plotRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
-    const visitorsRef = ref(db, 'visitors');
+    const visitorsRef = ref(db, "visitors");
     onValue(visitorsRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
         const visitorsList = Object.entries(data).map(([key, value]) => ({
           id: key,
-          ...(value as Omit<Visitor, 'id'>)
+          ...(value as Omit<Visitor, "id">),
         }));
         setVisitors(visitorsList);
       }
@@ -58,19 +58,19 @@ export const VisitorPlot: React.FC = () => {
 
     const plotWidth = plotRef.current.clientWidth;
     const plotHeight = plotRef.current.clientHeight;
-    
+
     const x = Math.random() * (plotWidth - 40) + 20;
     const y = Math.random() * (plotHeight - 40) + 20;
-    
-    const newVisitor: Omit<Visitor, 'id'> = {
+
+    const newVisitor: Omit<Visitor, "id"> = {
       name: name.trim(),
       event,
       x,
       y,
       color: eventColors[event] || eventColors.hackathon,
     };
-    
-    push(ref(db, 'visitors'), newVisitor);
+
+    push(ref(db, "visitors"), newVisitor);
     setName("");
   };
 
@@ -87,7 +87,7 @@ export const VisitorPlot: React.FC = () => {
             Laissez votre trace sur notre site et découvrez notre communauté d'événements tech.
           </p>
         </div>
-        
+
         <Card className="border-none shadow-lg">
           <CardHeader className="flex flex-col gap-4 md:flex-row md:items-end">
             <Input
@@ -100,7 +100,7 @@ export const VisitorPlot: React.FC = () => {
               radius="lg"
               startContent={<Icon icon="lucide:user" className="text-default-400" />}
             />
-            
+
             <Select
               label="Type d'événement"
               selectedKeys={[event]}
@@ -110,14 +110,14 @@ export const VisitorPlot: React.FC = () => {
               radius="lg"
             >
               {eventOptions.map((option) => (
-                <SelectItem key={option.key} value={option.key}>
+                <SelectItem key={option.key}>
                   {option.label}
                 </SelectItem>
               ))}
             </Select>
-            
-            <Button 
-              color="primary" 
+
+            <Button
+              color="primary"
               onPress={handleAddVisitor}
               isDisabled={!name.trim()}
               className="md:w-auto w-full"
@@ -126,9 +126,9 @@ export const VisitorPlot: React.FC = () => {
               Ajouter
             </Button>
           </CardHeader>
-          
+
           <CardBody>
-            <div 
+            <div
               ref={plotRef}
               className="relative w-full h-[400px] bg-content1 rounded-lg border border-default-200 overflow-hidden"
             >
@@ -145,11 +145,11 @@ export const VisitorPlot: React.FC = () => {
                   onMouseEnter={() => setHoveredVisitor(visitor)}
                   onMouseLeave={() => setHoveredVisitor(null)}
                 >
-                  <div 
+                  <div
                     className="w-4 h-4 rounded-full cursor-pointer"
                     style={{ backgroundColor: visitor.color }}
                   />
-                  
+
                   {hoveredVisitor?.id === visitor.id && (
                     <motion.div
                       initial={{ opacity: 0, y: 10 }}
@@ -157,13 +157,15 @@ export const VisitorPlot: React.FC = () => {
                       className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-foreground text-background px-3 py-1 rounded-lg text-sm whitespace-nowrap z-10"
                     >
                       <div className="font-bold">{visitor.name}</div>
-                      <div className="text-xs">{eventOptions.find(opt => opt.key === visitor.event)?.label}</div>
-                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground rotate-45"></div>
+                      <div className="text-xs">
+                        {eventOptions.find((opt) => opt.key === visitor.event)?.label}
+                      </div>
+                      <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground rotate-45" />
                     </motion.div>
                   )}
                 </motion.div>
               ))}
-              
+
               {visitors.length === 0 && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-default-400">
                   <Icon icon="lucide:users" width={48} height={48} />
@@ -171,14 +173,14 @@ export const VisitorPlot: React.FC = () => {
                 </div>
               )}
             </div>
-            
+
             <div className="flex justify-between items-center mt-4 text-sm text-default-500">
               <div>Total: {visitors.length} visiteurs</div>
               <div className="flex gap-4">
                 {eventOptions.map((option) => (
                   <div key={option.key} className="flex items-center gap-1">
-                    <div 
-                      className="w-3 h-3 rounded-full" 
+                    <div
+                      className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: eventColors[option.key] }}
                     />
                     <span>{option.label}</span>
